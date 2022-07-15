@@ -10,7 +10,7 @@ export const ACTIONS = {
 const reducer = (todos, action)=>{
   switch(action.type){
     case ACTIONS.ADD_TODO:
-      return [...todos, newTodo(action.payload.name)]
+      return [...todos, newTodo(action.payload.name)] 
     case ACTIONS.TOGGLE_TODO:
       return todos.map(todo => {
         if(todo.id === action.payload.id){
@@ -19,13 +19,13 @@ const reducer = (todos, action)=>{
         return todo
       })
     case ACTIONS.DELETE_TODO:
-      return todos.filter(todo => todo.id !== action.payload.id)   //   que hace esto
+      return todos.filter(todo => todo.id !== action.payload.id) 
   }
 }
 
-//1. por que aca es solo name y no payload.name
-const newTodo = (name)=>{
-  return { id: Date.now(), name: name, complete: false }  // 2. por que creo acá el objeto con esas propiedades
+//crea objeto con sus propiedades
+const newTodo = (data)=>{
+  return { id: Date.now(), name: data, complete: false } 
 }
 
 const App = ()=>{
@@ -33,9 +33,11 @@ const App = ()=>{
   const [todos, dispatch]= useReducer(reducer, [])
   const [name, setName] = useState('')
 
+  console.log(todos)
+
   const handleSubmit = (e)=> {
     e.preventDefault()
-    dispatch ({type: ACTIONS.ADD_TODO, payload: { name: name } }) // 3. por qué el nombre {name: name}
+    dispatch ({type: ACTIONS.ADD_TODO, payload: { name: name } }) // le puedo poner cualquier nombre a la propiedad pero SI le tengo que pasar name (useState)
     setName('')
   }
 
@@ -44,8 +46,8 @@ const App = ()=>{
       <form onSubmit={handleSubmit}>
         <input type="text" value={name} onChange={e => setName(e.target.value)}></input>
       </form>
-      {todos.map(todo => {
-        return <Todo key={todo.id} todo={todo} dispatch={dispatch} />    // por que es solo dispatch
+      {todos.map(todo => {                                            // cuando cambia una prop o un estado se renderiza nuevamente. El "todos" sale del useReducer.
+        return <Todo key={todo.id} todo={todo} dispatch={dispatch} />    
       })}
     </>
   )
